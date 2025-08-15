@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
-import * as Framer from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { XIcon as X } from './icons/XIcon';
 import { ChevronLeftIcon } from './icons/ChevronLeftIcon';
 import { ChevronRightIcon } from './icons/ChevronRightIcon';
 import { CollectionIcon } from './icons/CollectionIcon';
 import type { Illustration as MediaItemType } from '../types';
+
+// HACK: Workaround for framer-motion type errors.
+const m = motion as any;
 
 const MediaItem = ({ item, className, objectFit = 'cover' }: { item: MediaItemType, className?: string, objectFit?: 'cover' | 'contain' }) => {
     // The component currently renders an img tag for both 'image' and 'video' types.
@@ -55,7 +58,7 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
 
     return (
         <>
-            <Framer.motion.div
+            <m.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -63,18 +66,18 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                 onClick={onClose}
             >
                 {isAlbum && (
-                    <Framer.motion.button data-interactive="true" onClick={handlePrev} className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-[70] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                    <m.button data-interactive="true" onClick={handlePrev} className="absolute left-2 md:left-8 top-1/2 -translate-y-1/2 z-[70] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
                         <ChevronLeftIcon className="w-6 h-6 text-white" />
-                    </Framer.motion.button>
+                    </m.button>
                 )}
 
-                <Framer.motion.div
+                <m.div
                     layoutId={`media-${selectedItem.id}`}
                     className="relative w-full h-full max-w-5xl max-h-[90vh] flex items-center justify-center"
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <Framer.AnimatePresence mode="wait">
-                        <Framer.motion.div
+                    <AnimatePresence mode="wait">
+                        <m.div
                             key={mediaToDisplay.url}
                             className="w-full h-full flex flex-col"
                             initial={{ y: 20, opacity: 0 }}
@@ -92,17 +95,17 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                                 <h3 className="text-white text-xl font-bold">{selectedItem.title} {isAlbum && `(${currentAlbumIndex + 1}/${selectedItem.albumImages?.length})`}</h3>
                                 <p className="text-white/80 text-sm mt-1">{selectedItem.desc}</p>
                             </div>
-                        </Framer.motion.div>
-                    </Framer.AnimatePresence>
-                </Framer.motion.div>
+                        </m.div>
+                    </AnimatePresence>
+                </m.div>
 
                 {isAlbum && (
-                     <Framer.motion.button data-interactive="true" onClick={handleNext} className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-[70] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+                     <m.button data-interactive="true" onClick={handleNext} className="absolute right-2 md:right-8 top-1/2 -translate-y-1/2 z-[70] p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors">
                         <ChevronRightIcon className="w-6 h-6 text-white" />
-                    </Framer.motion.button>
+                    </m.button>
                 )}
 
-                <Framer.motion.button
+                <m.button
                     data-interactive="true"
                     className="absolute top-4 right-4 p-2 rounded-full bg-white/10 text-white hover:bg-white/20"
                     onClick={onClose}
@@ -110,19 +113,19 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                     whileTap={{ scale: 0.9 }}
                 >
                     <X className='w-5 h-5' />
-                </Framer.motion.button>
-            </Framer.motion.div>
+                </m.button>
+            </m.div>
             
             <div className="fixed z-[60] bottom-5 left-0 right-0 flex justify-center pointer-events-none">
                  <div className="flex justify-center">
-                    <Framer.motion.div
+                    <m.div
                         drag="x"
                         dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
                         dragElastic={0.1}
                         className="relative flex rounded-xl bg-black/40 backdrop-blur-lg border border-white/20 shadow-lg touch-none cursor-grab active:cursor-grabbing pointer-events-auto items-center -space-x-3 px-4 py-2"
                     >
                         {mediaItems.map((item, index) => (
-                            <Framer.motion.div
+                            <m.div
                                 key={item.id}
                                 onClick={() => setSelectedItem(item)}
                                 data-interactive="true"
@@ -145,9 +148,9 @@ const GalleryModal = ({ selectedItem, isOpen, onClose, setSelectedItem, mediaIte
                                     </div>
                                 )}
                                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
-                            </Framer.motion.div>
+                            </m.div>
                         ))}
-                    </Framer.motion.div>
+                    </m.div>
                 </div>
             </div>
         </>
@@ -159,7 +162,7 @@ const InteractiveBentoGallery: React.FC<{ mediaItems: MediaItemType[] }> = ({ me
 
     return (
         <div className="w-full">
-            <Framer.AnimatePresence>
+            <AnimatePresence>
                 {selectedItem && (
                     <GalleryModal
                         selectedItem={selectedItem}
@@ -169,12 +172,12 @@ const InteractiveBentoGallery: React.FC<{ mediaItems: MediaItemType[] }> = ({ me
                         mediaItems={mediaItems}
                     />
                 )}
-            </Framer.AnimatePresence>
-            <Framer.motion.div
+            </AnimatePresence>
+            <m.div
                 className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 auto-rows-[100px] md:auto-rows-[120px]"
             >
                 {mediaItems.map((item, index) => (
-                    <Framer.motion.div
+                    <m.div
                         key={item.id}
                         layoutId={`media-${item.id}`}
                         className={`relative overflow-hidden rounded-2xl cursor-pointer ${item.span} bg-[#1a2c1a]/30`}
@@ -194,7 +197,7 @@ const InteractiveBentoGallery: React.FC<{ mediaItems: MediaItemType[] }> = ({ me
                                 <CollectionIcon className="w-4 h-4 text-white" />
                             </div>
                         )}
-                        <Framer.motion.div
+                        <m.div
                             className="absolute inset-0 flex flex-col justify-end p-4 bg-gradient-to-t from-black/70 to-transparent"
                             initial={{ opacity: 0 }}
                             whileHover={{ opacity: 1 }}
@@ -202,10 +205,10 @@ const InteractiveBentoGallery: React.FC<{ mediaItems: MediaItemType[] }> = ({ me
                         >
                             <h3 className="relative text-white font-bold line-clamp-1">{item.title}</h3>
                             <p className="relative text-white/80 text-sm mt-1 line-clamp-1">{item.desc}</p>
-                        </Framer.motion.div>
-                    </Framer.motion.div>
+                        </m.div>
+                    </m.div>
                 ))}
-            </Framer.motion.div>
+            </m.div>
         </div>
     );
 };

@@ -36,11 +36,11 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
     >
       <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div 
-          className="font-anton text-2xl text-white cursor-pointer" 
+          className="cursor-pointer" 
           onClick={() => scrollTo('hero')}
           data-interactive="true"
         >
-          VINCENT
+          <img src="/assets/logo.png" alt="Vincent Portfolio Logo" className="h-8 w-auto" />
         </div>
         <ul className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (

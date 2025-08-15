@@ -1,12 +1,20 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import * as Framer from 'framer-motion';
+import { motion } from 'framer-motion';
 import { StylusIcon } from './icons/StylusIcon';
+
+// HACK: Workaround for framer-motion type errors.
+const m = motion as any;
 
 // A single particle component
 const Particle = ({ x, y }: { x: number, y: number }) => (
-  <Framer.motion.div
+  <m.div
     className="w-2 h-2 bg-lime-400 rounded-full absolute"
-    style={{ top: 0, left: 0, x: x - 4, y: y - 4 }} // Center the particle
+    style={{
+      top: 0,
+      left: 0,
+      x: x - 4,
+      y: y - 4,
+    }}
     initial={{ opacity: 1, scale: 1 }}
     animate={{ opacity: 0, scale: 0 }}
     transition={{ duration: 0.8, ease: 'easeOut' }}
@@ -111,20 +119,24 @@ const CustomCursor: React.FC = () => {
       ))}
       
       {/* Stylus Cursor */}
-      <Framer.motion.div
+      <m.div
         variants={cursorVariants}
         animate={isHovering ? 'hover' : 'default'}
-        style={{ x: position.x, y: position.y }}
+        style={{
+          x: position.x,
+          y: position.y,
+        }}
         transition={{ type: 'spring', stiffness: 800, damping: 40 }}
-        className="fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2"
+        className="fixed top-0 left-0"
       >
-        <Framer.motion.div
+        <m.div
+          className="-translate-x-1/2 -translate-y-1/2"
           animate={{ rotate: angle }}
           transition={{ type: 'spring', stiffness: 400, damping: 30 }}
         >
           <StylusIcon className="w-6 h-6 text-lime-400" />
-        </Framer.motion.div>
-      </Framer.motion.div>
+        </m.div>
+      </m.div>
     </div>
   );
 };

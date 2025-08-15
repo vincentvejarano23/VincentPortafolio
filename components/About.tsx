@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Section from './Section';
-import * as Framer from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { PaletteIcon } from './icons/PaletteIcon';
 import { LayersIcon } from './icons/LayersIcon';
 import { CodeBracketIcon } from './icons/CodeBracketIcon';
@@ -9,6 +9,8 @@ import { DevicePhoneMobileIcon } from './icons/DevicePhoneMobileIcon';
 import { ChevronDownIcon } from './icons/ChevronDownIcon';
 import { CogIcon } from './icons/CogIcon';
 
+// HACK: Workaround for framer-motion type errors.
+const m = motion as any;
 
 const skills = [
   {
@@ -56,7 +58,7 @@ const About: React.FC = () => {
       <div className="grid md:grid-cols-3 gap-12 items-center">
         <div className="md:col-span-1 flex justify-center">
           <img
-            src="https://i.pinimg.com/736x/21/1e/e5/211ee5011f7b369f2d0b2cad7ab86f98.jpg"
+            src="https://i.pinimg.com/736x/cf/4c/80/cf4c80d757407c524b2675774f9184d7.jpg"
             alt="Vincent's profile picture"
             className="rounded-full w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-lime-500/30 shadow-2xl shadow-lime-900/50"
           />
@@ -81,15 +83,15 @@ const About: React.FC = () => {
                      transition-all duration-300"
         >
           <span>{isSkillsVisible ? 'Ver menos' : 'Ver más'}</span>
-          <Framer.motion.div animate={{ rotate: isSkillsVisible ? 180 : 0 }}>
+          <m.div animate={{ rotate: isSkillsVisible ? 180 : 0 }}>
             <ChevronDownIcon className="w-5 h-5" />
-          </Framer.motion.div>
+          </m.div>
         </button>
       </div>
 
-      <Framer.AnimatePresence>
+      <AnimatePresence>
         {isSkillsVisible && (
-          <Framer.motion.div
+          <m.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto', transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
             exit={{ opacity: 0, height: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } }}
@@ -109,9 +111,9 @@ const About: React.FC = () => {
                 ))}
               </div>
             </div>
-          </Framer.motion.div>
+          </m.div>
         )}
-      </Framer.AnimatePresence>
+      </AnimatePresence>
     </Section>
   );
 };
