@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Logo } from './Logo';
 
 interface HeaderProps {
   scrollTo: (id: string) => void;
@@ -40,7 +41,7 @@ const Header: React.FC<HeaderProps> = ({ scrollTo }) => {
           onClick={() => scrollTo('hero')}
           data-interactive="true"
         >
-          <img src="/assets/logo.png" alt="Vincent Portfolio Logo" className="h-8 w-auto" />
+          <Logo className="h-8 w-auto text-gray-200" />
         </div>
         <ul className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
